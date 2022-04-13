@@ -12,7 +12,7 @@ imagedir:
 test: imagedir
 	go test ./...
 
-coverage: imagedir
+cover: imagedir
 	@go test ./... -cover
 
 lint:
