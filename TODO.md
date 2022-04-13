@@ -16,3 +16,6 @@
     - try having a seperate package but use a relative import
 - Test for images created with rectanges that don't start at origin 
 - Impliment gofont so the latofont can be removed
+
+## Issues
+- Function WriteAtCenter placing text too high
