@@ -9,6 +9,7 @@
 ## TxtPlacer struct
 - Add setter for line spacing
 - Add setter for dpi
+- Allow linewidth to be set to nil
 
 ## Testing
 - Add more cases to test failure cases
