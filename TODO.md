@@ -11,7 +11,6 @@ can be done quickly
 ## TxtPlacer struct
 - Add setter for line spacing
 - Add setter for dpi
-- Allow linewidth to be set to nil or -1
 
 ## Testing
 - Add more cases to test failure cases
@@ -19,6 +18,3 @@ can be done quickly
     - try having a seperate package but use a relative import
 - Test for images created with rectanges that don't start at origin 
 - Impliment gofont so the latofont can be removed
-
-## Issues
-- Function WriteAtCenter placing text too high

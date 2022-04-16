@@ -64,22 +64,28 @@ func (p *Placer) SetDst(dst draw.Image) {
 func (p *Placer) WriteAt(pt image.Point, text string, wrapwidth int, align string) {
 	lines := p.wordwrap(text, wrapwidth)
 	longest := p.maxLineLen(lines)
-	textHeight := p.Face.Metrics().Ascent.Ceil() + p.Face.Metrics().Descent.Ceil()
+    textAscent := p.Face.Metrics().Ascent.Ceil() 
+    textDescent := p.Face.Metrics().Descent.Ceil()
+    textCapHeight := p.Face.Metrics().CapHeight.Ceil()
+
+    textOffset := func(i int) int {
+        return textCapHeight + i*(textAscent+textDescent)
+    }
 
 	switch align {
 	case "left":
 		for i, line := range lines {
-			p.Drawer.Dot = fixed.P(pt.X, pt.Y+i*textHeight)
+			p.Drawer.Dot = fixed.P(pt.X, pt.Y + textOffset(i))
 			p.Drawer.DrawString(line)
 		}
 	case "center":
 		for i, line := range lines {
-			p.Drawer.Dot = fixed.P(pt.X+(longest-p.pixWidth(line))/2, pt.Y+i*textHeight)
+			p.Drawer.Dot = fixed.P(pt.X+(longest-p.pixWidth(line))/2, pt.Y + textOffset(i))
 			p.Drawer.DrawString(line)
 		}
 	case "right":
 		for i, line := range lines {
-			p.Drawer.Dot = fixed.P(pt.X+(longest-p.pixWidth(line)), pt.Y+i*textHeight)
+			p.Drawer.Dot = fixed.P(pt.X+(longest-p.pixWidth(line)), pt.Y + textOffset(i))
 			p.Drawer.DrawString(line)
 		}
 	default:
