@@ -40,7 +40,7 @@ func TestNewTextPlacer(t *testing.T) {
 	}
 }
 
-func TestWrite(t *testing.T) {
+func TestWriteAt(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 400, 400))
 
 	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 12.0)
@@ -54,11 +54,9 @@ func TestWrite(t *testing.T) {
 		wrapwidth int
 		align     string
 	}{
-		{image.Point{10, 20}, "Example text", 100, "left"},
-		{image.Point{200, 200}, "Multiline\nexample\ntext\ninput", 100, "left"},
-		{image.Point{10, 200}, "A long word wraping example. A long word wrapping example.", 100, "center"},
-		{image.Point{10, 200}, "A multiline\nexample\nwith center\nalignment.", 100, "center"},
-		{image.Point{10, 200}, "A\nright\naligned\nmultiline\nexample", 100, "right"},
+        {image.Point{200, 200}, "WriteAt\npos: 200, 200\nalign: left\nwrap: 200\nA multiline\nexample", 200, "left"},
+        {image.Point{10, 200}, "WriteAt\npos: 10, 200\nalign: center\nwrap: 200\nA long word wraping example. A long long word wrapping example.", 200, "center"},
+        {image.Point{10, 200}, "Write at\npos: 10, 200\nalign: right\nA\nright\naligned\nmultiline\nexample", 200, "right"},
 	}
 
 	for i, tc := range tt {
@@ -73,7 +71,7 @@ func TestWrite(t *testing.T) {
 func TestCenterAt(t *testing.T) {
 	img := image.NewNRGBA(image.Rect(0, 0, 400, 400))
 
-	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 12.0)
+	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 48.0)
 	if err != nil {
 		t.Error(err)
 	}
@@ -88,12 +86,12 @@ func TestCenterAt(t *testing.T) {
 func TestWriteAtCenter(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 400, 400))
 
-	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 12.0)
+	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 48.0)
 	if err != nil {
 		t.Error(err)
 	}
 
-	placer.WriteAtCenter("func: WriteAtCenter\nwrapwidth: 100\nalign: \"center\"", 100, "center")
+	placer.WriteAtCenter("WriteAtCenter\nwrapwidth: 100\nalign: center", 100, "center")
 
 	outfile := filepath.Join(imgdir, "WriteAtCenter.png")
 	outputTestImg(outfile, img, t)
