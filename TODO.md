@@ -5,6 +5,8 @@
 - Work on README.md
 - Work on versioning
 - Organize imports
+- Try to make all calculations before write methods so that writing
+can be done quickly
 
 ## TxtPlacer struct
 - Add setter for line spacing

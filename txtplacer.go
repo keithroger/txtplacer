@@ -53,6 +53,7 @@ type Placer struct {
 	Drawer font.Drawer
 	Dst    draw.Image
 	Size   float64
+    // TODO add text []string
 }
 
 // Writes string starting from pt. If there are multiple lines text
