@@ -43,7 +43,7 @@ func NewPlacer(dst draw.Image, fontPath string, size float64) (Placer, error) {
 	return Placer{
 		Face:   face,
 		Drawer: drawer,
-		Dst:    dst,
+		dst:    dst,
 		Size:   size,
 	}, nil
 }
@@ -51,9 +51,12 @@ func NewPlacer(dst draw.Image, fontPath string, size float64) (Placer, error) {
 type Placer struct {
 	Face   font.Face
 	Drawer font.Drawer
-	Dst    draw.Image
+	dst    draw.Image
 	Size   float64
-    // TODO add text []string
+}
+
+func (p *Placer) SetDst(dst draw.Image) {
+    p.Drawer.Dst = dst
 }
 
 // Writes string starting from pt. If there are multiple lines text
@@ -84,7 +87,7 @@ func (p *Placer) WriteAt(pt image.Point, text string, wrapwidth int, align strin
 }
 
 func (p *Placer) WriteAtCenter(text string, wrapwidth int, align string) {
-	center := image.Point{p.Dst.Bounds().Dx() / 2, p.Dst.Bounds().Dy() / 2}
+	center := image.Point{p.dst.Bounds().Dx() / 2, p.dst.Bounds().Dy() / 2}
 	p.CenterAt(center, text, wrapwidth, align)
 }
 
@@ -118,7 +121,7 @@ func (p *Placer) SetFont(fontPath string) error {
 	}
 
 	drawer := font.Drawer{
-		Dst:  p.Dst,
+		Dst:  p.dst,
 		Src:  image.Black,
 		Face: face,
 		Dot:  fixed.P(0, 0),

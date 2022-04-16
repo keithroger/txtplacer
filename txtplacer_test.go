@@ -2,6 +2,7 @@ package txtplacer_test
 
 import (
 	"image"
+    "image/color"
 	"image/draw"
 	"image/png"
 	"os"
@@ -41,7 +42,7 @@ func TestNewTextPlacer(t *testing.T) {
 }
 
 func TestWriteAt(t *testing.T) {
-	img := image.NewRGBA(image.Rect(0, 0, 400, 400))
+	img := gridImg()
 
 	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 12.0)
 	if err != nil {
@@ -55,12 +56,13 @@ func TestWriteAt(t *testing.T) {
 		align     string
 	}{
         {image.Point{200, 200}, "WriteAt\npos: 200, 200\nalign: left\nwrap: 200\nA multiline\nexample", 200, "left"},
-        {image.Point{10, 200}, "WriteAt\npos: 10, 200\nalign: center\nwrap: 200\nA long word wraping example. A long long word wrapping example.", 200, "center"},
+        {image.Point{10, 10}, "WriteAt\npos: 10, 10\nalign: center\nwrap: 200\nA long word wraping example. A long long word wrapping example.", 200, "center"},
         {image.Point{10, 200}, "Write at\npos: 10, 200\nalign: right\nA\nright\naligned\nmultiline\nexample", 200, "right"},
 	}
 
 	for i, tc := range tt {
-		draw.Draw(img, img.Bounds(), image.White, image.Point{}, draw.Src)
+        img := gridImg()
+        placer.SetDst(img)
 		placer.WriteAt(tc.pt, tc.text, tc.wrapwidth, tc.align)
 
 		outfile := filepath.Join(imgdir, "WriteAt"+strconv.Itoa(i)+".png")
@@ -69,7 +71,7 @@ func TestWriteAt(t *testing.T) {
 }
 
 func TestCenterAt(t *testing.T) {
-	img := image.NewNRGBA(image.Rect(0, 0, 400, 400))
+	img := gridImg()
 
 	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 48.0)
 	if err != nil {
@@ -84,7 +86,7 @@ func TestCenterAt(t *testing.T) {
 }
 
 func TestWriteAtCenter(t *testing.T) {
-	img := image.NewRGBA(image.Rect(0, 0, 400, 400))
+	img := gridImg()
 
 	placer, err := txtplacer.NewPlacer(img, filepath.Join(fontdir, "Lato.ttf"), 48.0)
 	if err != nil {
@@ -107,4 +109,19 @@ func outputTestImg(filepath string, img draw.Image, t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func gridImg() draw.Image {
+    img := image.NewRGBA(image.Rect(0, 0, 400, 400))
+    draw.Draw(img, img.Bounds(), image.White, image.Point{0, 0}, draw.Src)
+
+    for i := img.Rect.Min.X; i < img.Rect.Max.X; i++ {
+        for j := img.Rect.Min.X; j < img.Rect.Max.X; j++ {
+            if i == 10 || i == 200 || i == 390 || j == 10 || j == 200 || j == 390 {
+                img.Set(i, j, color.Black)
+            }
+        }
+    }
+
+    return img
 }
